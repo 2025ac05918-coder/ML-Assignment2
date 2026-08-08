@@ -13,7 +13,7 @@ The objective of this project is to predict whether a client will subscribe to a
 - **Target Variable:** `y` (Has the client subscribed to a term deposit?)
 
 ## c. Github Repository Link
-**Link:** [INSERT_YOUR_GITHUB_REPO_LINK_HERE]
+**Link:** (https://github.com/2025ac05918-coder/ML-Assignment2/blob/main/README.md)
 
 ## d. Models Used
 The following metrics were calculated using the test split of the dataset.
