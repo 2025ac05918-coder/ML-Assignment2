@@ -1,6 +1,4 @@
 # ⬇️ Colab-only: quiet installs so the log is small
-!pip -q install --upgrade pip
-!pip -q install streamlit scikit-learn pandas numpy matplotlib seaborn joblib kagglehub
 import os, textwrap, json, subprocess, pathlib, shutil, getpass
 
 ROOT = pathlib.Path('/content/bank_marketing_project')
