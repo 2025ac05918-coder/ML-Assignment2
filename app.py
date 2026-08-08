@@ -109,10 +109,14 @@ else:
 eval_target = "y" if "y" in df_eval.columns else "deposit"
 df_eval = df_eval.copy()
 
-# Standardize labels to integers 0 and 1
-if df_eval[eval_target].dtype == 'object':
-    mapping = {'no': 0, 'yes': 1, '0': 0, '1': 1, 'n': 0, 'y': 1}
-    df_eval[eval_target] = df_eval[eval_target].str.lower().map(mapping).fillna(0).astype(int)
+# Robust mapping for evaluation labels
+def clean_labels(val):
+    v = str(val).lower().strip()
+    if v in ['yes', 'y', '1', '1.0']:
+        return 1
+    return 0
+
+df_eval[eval_target] = df_eval[eval_target].apply(clean_labels)
 
 X_eval = df_eval.drop(columns=[eval_target])
 y_eval = df_eval[eval_target]
@@ -129,9 +133,9 @@ except:
 metrics = {
     "Accuracy": accuracy_score(y_eval, y_pred),
     "AUC": roc_auc_score(y_eval, y_prob),
-    "Precision": precision_score(y_eval, y_pred, zero_division=0),
-    "Recall": recall_score(y_eval, y_pred, zero_division=0),
-    "F1": f1_score(y_eval, y_pred, zero_division=0)
+    "Precision": precision_score(y_eval, y_pred, pos_label=1, zero_division=0),
+    "Recall": recall_score(y_eval, y_pred, pos_label=1, zero_division=0),
+    "F1": f1_score(y_eval, y_pred, pos_label=1, zero_division=0)
 }
 
 cols = st.columns(len(metrics))
