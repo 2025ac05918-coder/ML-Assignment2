@@ -39,10 +39,3 @@ The following metrics were calculated using the test split of the dataset.
 ### Overall Winner
 The **Random Forest Classifier** is the overall winner for this dataset, as it achieved the highest Accuracy (0.90), AUC (0.92), and MCC Score (0.45), indicating the most robust predictive power across all classes.
 
----
-
-## How to Run the App
-1. Clone this repository.
-2. Install dependencies: `pip install -r requirements.txt`.
-3. Run the Streamlit app: `streamlit run app.py`.
-4. Upload `test_data.csv` to see model evaluations.
