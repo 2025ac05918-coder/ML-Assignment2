@@ -28,7 +28,7 @@ except ImportError:
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Bank Marketing – ML Models", layout="wide")
 st.title("   Bank Marketing – ML Model Comparison Dashboard")
-st.markdown("This app downloads data, trains classifiers (if needed), and evaluates them on test data.")
+st.markdown("This app downloads data, trains classifiers (if needed), and evaluates them on test data. This was prepared by Punitha S. 2025ac05918-ML-Assignment-2")
 
 PROJECT_ROOT = pathlib.Path(os.getcwd())
 MODEL_DIR = PROJECT_ROOT / "model"
