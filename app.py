@@ -21,13 +21,12 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (accuracy_score, roc_auc_score, precision_score,
-                             recall_score, f1_score, matthews_corrcoef,
-                             confusion_matrix)
+                             recall_score, f1_score, confusion_matrix)
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Bank Marketing - ML Models", layout="wide")
-st.title("Bank Marketing - ML Model Comparison Dashboard")
-st.markdown("This application comparison different classifiers on the Bank Marketing dataset.")
+st.title("🏦 Bank Marketing - ML Model Comparison Dashboard")
+st.markdown("This application compares different classifiers on the Bank Marketing dataset.")
 
 # --- SETUP DIRECTORIES ---
 PROJECT_ROOT = pathlib.Path(os.getcwd())
@@ -35,7 +34,6 @@ MODEL_DIR = PROJECT_ROOT / "model"
 MODEL_DIR.mkdir(exist_ok=True)
 TEST_DATA_FILE = PROJECT_ROOT / "test_data.csv"
 
-# --- MODEL FILE PATHS ---
 SCALER_FILE = MODEL_DIR / "scaler.pkl"
 MODEL_FILES = {
     "Logistic Regression": MODEL_DIR / "Logistic_Regression.pkl",
@@ -47,10 +45,10 @@ MODEL_FILES = {
 
 def train_and_save_models():
     if not KAGGLE_AVAILABLE:
-        st.error("kagglehub is not installed. Please add it to requirements.txt.")
+        st.error("The 'kagglehub' library is missing. Please add it to requirements.txt.")
         st.stop()
-        
-    st.info("Training models since no pre-trained artifacts were found...")
+
+    st.info("Training models... this may take a moment.")
     try:
         k_path = kagglehub.dataset_download('janiobachmann/bank-marketing-dataset')
         bank_csv = os.path.join(k_path, "bank.csv")
@@ -61,17 +59,14 @@ def train_and_save_models():
 
     target_col = "deposit" if "deposit" in df_raw.columns else "y"
     df = df_raw.copy()
-    
-    for col in df.select_dtypes(include=['object']).columns:
-        if col != target_col:
-            df[col] = LabelEncoder().fit_transform(df[col])
 
-    if df[target_col].dtype == 'object':
-        df[target_col] = LabelEncoder().fit_transform(df[target_col])
+    for col in df.select_dtypes(include=['object']).columns:
+        le = LabelEncoder()
+        df[col] = le.fit_transform(df[col].astype(str))
 
     X = df.drop(columns=[target_col])
     y = df[target_col]
-    
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
     scaler = StandardScaler().fit(X_train)
     X_train_scaled = scaler.transform(X_train)
@@ -92,7 +87,7 @@ def train_and_save_models():
     for name, mdl in models_dict.items():
         mdl.fit(X_train_scaled, y_train)
         joblib.dump(mdl, MODEL_FILES[name])
-    st.success("Training complete.")
+    st.success("Models trained successfully.")
 
 # --- LOGIC ---
 if not SCALER_FILE.exists() or not all(p.exists() for p in MODEL_FILES.values()):
@@ -107,17 +102,23 @@ if uploaded:
     df_eval = pd.read_csv(uploaded)
 elif TEST_DATA_FILE.exists():
     df_eval = pd.read_csv(TEST_DATA_FILE)
-    st.info("Using local test_data.csv")
 else:
-    st.warning("No data found. Please upload test_data.csv")
+    st.warning("No evaluation data found.")
     st.stop()
 
 eval_target = "y" if "y" in df_eval.columns else "deposit"
+df_eval = df_eval.copy()
+
+# Standardize labels to integers 0 and 1
+if df_eval[eval_target].dtype == 'object':
+    mapping = {'no': 0, 'yes': 1, '0': 0, '1': 1, 'n': 0, 'y': 1}
+    df_eval[eval_target] = df_eval[eval_target].str.lower().map(mapping).fillna(0).astype(int)
+
 X_eval = df_eval.drop(columns=[eval_target])
 y_eval = df_eval[eval_target]
 X_eval_scaled = scaler.transform(X_eval)
 
-chosen = st.selectbox("Choose Model", model_names)
+chosen = st.selectbox("Select Model", model_names)
 model = models[chosen]
 y_pred = model.predict(X_eval_scaled)
 try:
@@ -125,13 +126,12 @@ try:
 except:
     y_prob = y_pred
 
-# --- METRICS ---
 metrics = {
     "Accuracy": accuracy_score(y_eval, y_pred),
     "AUC": roc_auc_score(y_eval, y_prob),
-    "Precision": precision_score(y_eval, y_pred),
-    "Recall": recall_score(y_eval, y_pred),
-    "F1": f1_score(y_eval, y_pred)
+    "Precision": precision_score(y_eval, y_pred, zero_division=0),
+    "Recall": recall_score(y_eval, y_pred, zero_division=0),
+    "F1": f1_score(y_eval, y_pred, zero_division=0)
 }
 
 cols = st.columns(len(metrics))
