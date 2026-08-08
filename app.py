@@ -34,13 +34,13 @@ PROJECT_ROOT = pathlib.Path(os.getcwd())
 MODEL_DIR = PROJECT_ROOT / "model"
 MODEL_DIR.mkdir(exist_ok=True)
 TEST_DATA_FILE = PROJECT_ROOT / "test_data.csv"
-SCALER_FILE = MODEL_DIR / "scaler.pkl"
+SCALER_FILE = MODEL_DIR / "scaler.py"
 MODEL_FILES = {
-    "Logistic Regression": MODEL_DIR / "Logistic_Regression.pkl",
-    "Decision Tree": MODEL_DIR / "Decision_Tree.pkl",
-    "kNN": MODEL_DIR / "kNN.pkl",
-    "Naive Bayes": MODEL_DIR / "Naive_Bayes.pkl",
-    "Random Forest": MODEL_DIR / "Random_Forest.pkl"
+    "Logistic Regression": MODEL_DIR / "Logistic_Regression.py",
+    "Decision Tree": MODEL_DIR / "Decision_Tree.py",
+    "kNN": MODEL_DIR / "kNN.py",
+    "Naive Bayes": MODEL_DIR / "Naive_Bayes.py",
+    "Random Forest": MODEL_DIR / "Random_Forest.py"
 }
 
 def train_and_save_models():
