@@ -1,31 +1,29 @@
 # 2025ac05918 ML-Assignment2
 # Bank Marketing Classification
 
-## a. Problem statement
-Predict whether a client will subscribe to a term deposit after a bank marketing campaign.
+a. Problem Statement
+The goal is to predict if a client will subscribe to a term deposit (variable 'y') based on marketing campaign data. This is a binary classification problem aimed at increasing campaign efficiency.
 
-## b. Dataset description
-Source: UCI Bank Marketing Dataset
-Instances: 45211, Features: 20
-Target: y - yes/no subscription to term deposit
+b. Dataset Description
 
-## c. Github Repository Link
-[Your Repo Link]
+Source: UCI Machine Learning Repository (Bank Marketing Dataset).
+Instances: 45,211.
+Features: 17 (Including Age, Job, Marital Status, Education, Balance, Housing, Loan, etc.).
+d. Models Comparison Table
 
-## d. Models used
-| ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
-| --- | --- | --- | --- | --- | --- | --- |
-| Logistic Regression |  |  |  |  |  |  |
-| Decision Tree |  |  |  |  |  |  |
-| kNN |  |  |  |  |  |  |
-| Naive Bayes |  |  |  |  |  |  |
-| Random Forest |  |  |  |  |  |  |
+ML Model Name	Accuracy	AUC	Precision	Recall	F1	MCC
+Logistic Regression	0.89	0.82	0.58	0.20	0.30	0.29
+Decision Tree	0.87	0.70	0.46	0.47	0.46	0.38
+kNN	0.88	0.74	0.51	0.28	0.36	0.31
+Naive Bayes	0.82	0.79	0.34	0.51	0.41	0.32
+Random Forest	0.90	0.92	0.65	0.38	0.48	0.45
+(Note: These values are estimates based on standard dataset performance; replace with your actual script output.)
 
-| ML Model Name | Observation about model performance |
-| --- | --- |
-| Logistic Regression |  |
-| Decision Tree |  |
-| kNN |  |
-| Naive Bayes |  |
-| Random Forest |  |
-| Overall Winner |  |
+Observations
+
+Logistic Regression: Good baseline but suffers from low recall on the minority class.
+Decision Tree: Highly prone to overfitting, showing high variance.
+kNN: Computationally expensive during inference; performance is average.
+Naive Bayes: Best Recall for the "Yes" class, but lowest overall accuracy.
+Random Forest: Best performer across most metrics, specifically AUC and Accuracy.
+Overall Winner: Random Forest (Highest AUC and F1 Score).
